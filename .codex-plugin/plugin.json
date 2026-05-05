@@ -1,0 +1,38 @@
+{
+  "name": "legalize-kr",
+  "description": "Legalize-KR MCP and Skills integration for Korean laws, court precedents, administrative rules, and local ordinances.",
+  "author": {
+    "name": "Junghwan Park",
+    "url": "https://github.com/legalize-kr"
+  },
+  "homepage": "https://legalize.kr",
+  "repository": "https://github.com/legalize-kr/agent-skills",
+  "license": "MIT",
+  "keywords": [
+    "korean-law",
+    "legal-data",
+    "laws",
+    "precedents",
+    "administrative-rules",
+    "ordinances",
+    "mcp"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "Legalize-KR",
+    "shortDescription": "한국 법령·판례·행정규칙·자치법규 데이터",
+    "longDescription": "Legalize-KR public Korean legal datasets as reusable skills and MCP tools for AI agents.",
+    "developerName": "Junghwan Park",
+    "category": "Productivity",
+    "capabilities": [
+      "Interactive"
+    ],
+    "websiteURL": "https://legalize.kr",
+    "defaultPrompt": [
+      "민법 제750조를 Legalize-KR로 조회해줘.",
+      "점유취득시효 관련 판례를 찾아줘.",
+      "서울특별시 조례에서 공공시설 관련 내용을 찾아줘."
+    ]
+  }
+}

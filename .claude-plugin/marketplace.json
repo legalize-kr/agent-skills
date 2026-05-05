@@ -1,0 +1,30 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "legalize-kr-marketplace",
+  "owner": {
+    "name": "Junghwan Park (@9bow)"
+  },
+  "description": "Plugins for using Legalize-KR public Korean legal datasets.",
+  "plugins": [
+    {
+      "name": "legalize-kr",
+      "source": "./",
+      "description": "Use laws, court precedents, administrative rules, and local ordinances from Legalize-KR.",
+      "homepage": "https://legalize.kr",
+      "repository": "https://github.com/legalize-kr/agent-skills",
+      "license": "MIT",
+      "strict": false,
+      "skills": [
+        "./skills/legalize-kr"
+      ],
+      "mcpServers": "./.mcp.json",
+      "category": "legal-data",
+      "tags": [
+        "korean-law",
+        "legal-data",
+        "mcp",
+        "git"
+      ]
+    }
+  ]
+}

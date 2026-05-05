@@ -1,0 +1,17 @@
+{
+  "name": "legalize-kr-marketplace",
+  "owner": {
+    "name": "Junghwan Park (@9bow)"
+  },
+  "metadata": {
+    "description": "Legalize-KR MCP and Skills integration for Korean laws, court precedents, administrative rules, and local ordinances."
+  },
+  "plugins": [
+    {
+      "name": "legalize-kr",
+      "description": "Use laws, court precedents, administrative rules, and local ordinances from Legalize-KR.",
+      "source": "./"
+    }
+  ]
+}
+

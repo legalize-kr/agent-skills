@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "legalize-kr": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "legalize-cli[mcp]",
+        "legalize-mcp"
+      ]
+    }
+  }
+}
+

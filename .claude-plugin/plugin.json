@@ -1,0 +1,20 @@
+{
+  "name": "legalize-kr",
+  "description": "Use Legalize-KR public Korean legal datasets, including laws, court precedents, administrative rules, and local ordinances.",
+  "author": {
+    "name": "Junghwan Park"
+  },
+  "homepage": "https://legalize.kr",
+  "repository": "https://github.com/legalize-kr/agent-skills",
+  "license": "MIT",
+  "keywords": [
+    "korean-law",
+    "legal-data",
+    "laws",
+    "precedents",
+    "administrative-rules",
+    "ordinances"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json"
+}

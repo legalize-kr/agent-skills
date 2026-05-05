@@ -1,0 +1,4 @@
+interface:
+  display_name: "Legalize-KR"
+  short_description: "한국 법령·판례·공공 법규 데이터 활용"
+  default_prompt: "$legalize-kr 스킬로 민법 제750조와 관련 판례를 Legalize-KR 데이터 기준으로 찾아줘."

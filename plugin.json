@@ -1,0 +1,22 @@
+{
+  "name": "legalize-kr",
+  "description": "Legalize-KR MCP and Skills integration for Korean laws, court precedents, administrative rules, and local ordinances.",
+  "author": {
+    "name": "Junghwan Park",
+    "url": "https://github.com/legalize-kr"
+  },
+  "homepage": "https://legalize.kr",
+  "repository": "https://github.com/legalize-kr/agent-skills",
+  "license": "MIT",
+  "keywords": [
+    "korean-law",
+    "legal-data",
+    "laws",
+    "precedents",
+    "administrative-rules",
+    "ordinances",
+    "mcp"
+  ],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json"
+}

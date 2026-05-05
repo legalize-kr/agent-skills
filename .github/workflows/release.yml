@@ -1,0 +1,50 @@
+name: Release Claude plugin
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Validate Python scripts
+        run: |
+          python3 -m py_compile \
+            scripts/package_claude_plugin.py \
+            scripts/validate_claude_plugin_package.py \
+            skills/legalize-kr/scripts/select_access_mode.py
+
+      - name: Build Claude Cowork plugin ZIP
+        run: |
+          python3 scripts/package_claude_plugin.py
+          python3 scripts/validate_claude_plugin_package.py dist/legalize-kr-plugin.zip
+
+      - name: Upload workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: legalize-kr-plugin
+          path: dist/legalize-kr-plugin.zip
+          if-no-files-found: error
+
+      - name: Publish GitHub Release asset
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG_NAME: ${{ github.ref_name }}
+        run: |
+          if ! gh release view "$TAG_NAME" >/dev/null 2>&1; then
+            gh release create "$TAG_NAME" \
+              --title "$TAG_NAME" \
+              --notes "Claude Cowork upload package for Legalize-KR agent skills."
+          fi
+          gh release upload "$TAG_NAME" dist/legalize-kr-plugin.zip --clobber
+
