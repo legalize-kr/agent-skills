@@ -7,7 +7,7 @@
   },
   "homepage": "https://legalize.kr",
   "repository": "https://github.com/legalize-kr/agent-skills",
-  "license": "MIT",
+  "license": "MIT OR Apache-2.0",
   "keywords": [
     "korean-law",
     "legal-data",

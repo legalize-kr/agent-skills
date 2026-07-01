@@ -12,7 +12,7 @@
       "description": "Use laws, court precedents, administrative rules, and local ordinances from Legalize-KR.",
       "homepage": "https://legalize.kr",
       "repository": "https://github.com/legalize-kr/agent-skills",
-      "license": "MIT",
+      "license": "MIT OR Apache-2.0",
       "strict": false,
       "skills": [
         "./skills/legalize-kr"
