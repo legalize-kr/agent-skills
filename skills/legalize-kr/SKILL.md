@@ -77,6 +77,33 @@ legalize search "부동산 점유취득시효" --in all --json
 
 Use `--json` for agent-readable output. Use `--offline` only when the needed data is already cached.
 
+### Law date semantics
+
+For a dated law request, ask whether the user means the promulgated version or
+the file version in force on that date. Always pass the intended semantic
+explicitly:
+
+```bash
+# Version promulgated by 2024-10-01. This is the compatibility default.
+legalize laws get 민법 --date 2024-10-01 --semantic 공포일자 --json
+
+# File version whose frontmatter enforcement date is on or before 2024-10-01.
+legalize laws article 민법 제1조 --date 2024-10-01 --semantic 시행일자 --json
+```
+
+- `공포일자` is the default for CLI and MCP compatibility. A response can have
+  a later enforcement date; inspect `warning` before describing it as in force.
+- `시행일자` selects from each revision file's frontmatter. It is the appropriate
+  choice for a request such as "what was in force on this date?"
+- This is a file-level selection. `file_effective_date_only: true` means the
+  tool does not decide article-specific commencement dates, supplementary-rule
+  application cases, or transitional measures. An article's `status` is not an
+  effective-date determination.
+- For dates before 1970, the tool uses the actual frontmatter date because Git
+  author dates for those historical revisions are epoch-clamped.
+- For either semantic, use `semantic`, `requested_date`, and
+  `resolved_version_date` in JSON output when reporting the basis used.
+
 ## MCP Quick Reference
 
 Install MCP support:
@@ -121,6 +148,11 @@ Current tool surface in `legalize-cli` includes:
 - `admrules_list`, `admrules_get`
 - `ordinances_list`, `ordinances_get`
 - `search`
+
+`laws_get` and `laws_article` accept `semantic: "공포일자" | "시행일자"` with
+`공포일자` as the default. Their responses identify the selected semantic and
+date; `laws_article` also returns the file's promulgation date, enforcement
+date, source, law ID, law MST, and `file_effective_date_only`.
 
 Prefer MCP when a user asks an agent to answer legal-data questions conversationally and the host can run local stdio MCP servers. If the host cannot run tools, use the skill as guidance and cite the GitHub dataset paths or direct URLs used.
 

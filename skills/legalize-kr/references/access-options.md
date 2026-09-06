@@ -43,6 +43,30 @@ legalize admrules list --agency 행정안전부 --type 고시 --json
 legalize ordinances list --jurisdiction 서울특별시 --type 조례 --json
 ```
 
+## Law Date Semantics
+
+`laws as-of`, `laws get`, `laws article`, `laws diff`, and MCP `laws_get` /
+`laws_article` accept both `공포일자` and `시행일자`:
+
+```bash
+# Explicit compatibility behavior: latest file promulgated by the date.
+legalize laws get 민법 --date 2024-10-01 --semantic 공포일자 --json
+
+# File version in force by its frontmatter enforcement date.
+legalize laws article 민법 제1조 --date 2024-10-01 --semantic 시행일자 --json
+```
+
+- The default is `공포일자`. If that version had not yet entered into force,
+  the JSON response has `warning`.
+- Use `시행일자` for a request about the file version in force on a date.
+- The decision is file-level only. `file_effective_date_only: true` excludes
+  article-specific effective dates, supplementary-rule application cases, and
+  transitional measures. Report this limitation when it affects the answer.
+- For a date before 1970, the selection uses the actual frontmatter date rather
+  than the epoch-clamped Git author date.
+- Cite `semantic`, `requested_date`, `resolved_version_date`, and the selected
+  commit SHA in date-sensitive answers.
+
 ## Rate Limits
 
 GitHub REST API limits are usually:
@@ -96,7 +120,8 @@ pipx install 'legalize-cli[mcp]'
 
 Available tool categories:
 
-- Laws: list, full text, article.
+- Laws: list, full text, article. `laws_get` and `laws_article` support the
+  `semantic` argument and return `file_effective_date_only` for dated results.
 - Precedents: list, full text.
 - Administrative rules: list, full text.
 - Local ordinances: list, full text.
