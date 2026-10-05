@@ -15,10 +15,15 @@ Legalize-KR의 공개 한국 법률 데이터를 AI Agent가 활용하도록 돕
 
 ## 먼저 고르기
 
+현재 대화에 Legalize-KR MCP 조회 도구가 있다면 바로 사용하세요. Python이나 CLI를 설치하거나 개인 GitHub 계정을 연결할 필요가 없습니다. 스킬은 연결된 도구를 우선 선택하고, 검색한 문서 후보의 전문을 조회한 뒤 출처와 함께 답하도록 안내합니다.
+
+OpenAI Sites의 `Legalize-KR MCP Server` 플러그인과 이 저장소의 스킬/로컬 MCP 패키지는 연결 방식이 다릅니다. [Sites 안내 페이지](https://legalize-kr-mcp.icy-bowl-0769.chatgpt.site)는 공개되어 있으며, 조회 도구는 앱에서 계정을 연결해 사용합니다. 사이트 공개와 플러그인 공개 목록 등록은 별개입니다. 이 저장소의 ZIP을 바꾸어도 Sites 플러그인이 갱신되지는 않습니다.
+
 터미널이나 개발 도구가 익숙하지 않다면 **Claude Cowork에서 Release ZIP 업로드**를 권장합니다.
 
 | 상황 | 권장 방법 |
 |---|---|
+| 현재 대화에 Legalize-KR MCP 도구가 이미 보임 | 플러그인을 선택하고 자연어로 조회 요청. 추가 로컬 설치 불필요 |
 | Claude Cowork를 쓰고 있고 터미널을 피하고 싶음 | GitHub Releases에서 `legalize-kr-plugin.zip` 다운로드 후 Cowork에 업로드 |
 | Claude Code를 씀 | `/plugin marketplace add legalize-kr/agent-skills` 후 플러그인 설치 |
 | Cursor, Codex, Cline, GitHub Copilot, Warp 등을 씀 | `npx skills add legalize-kr/agent-skills --skill legalize-kr` |
@@ -49,6 +54,10 @@ Legalize-KR로 민법 제750조를 조회해줘.
 ```
 
 ```text
+행정안전부 고시 목록을 5개 보여줘. 내가 선택한 문서의 전문과 출처를 불러와줘.
+```
+
+```text
 서울특별시 조례 중 공공시설 사용료와 관련된 내용을 찾아줘.
 ```
 
@@ -56,7 +65,9 @@ Legalize-KR로 민법 제750조를 조회해줘.
 근로기준법이 2020년과 2024년 사이에 어떻게 바뀌었는지 비교해줘.
 ```
 
-Agent가 단순 설명만 하고 실제 조회를 하지 않는다면 MCP 서버가 연결되지 않은 상태일 수 있습니다. 이 경우에도 스킬은 접근 방법을 안내하지만, 실제 데이터 조회 도구까지 쓰려면 `legalize-cli` 또는 `legalize-mcp` 설정이 필요합니다.
+Agent가 단순 설명만 한다면 현재 대화에 조회 도구가 제공되는지 먼저 확인하세요. 플러그인 설치, 계정 연결, 현재 대화의 도구 선택은 서로 다를 수 있습니다. 이미 연결한 플러그인을 재설치하기보다 대화의 플러그인 선택 상태를 확인하세요. 로컬 MCP를 사용하는 환경에서만 `legalize-cli` 또는 `legalize-mcp` 실행 설정이 필요합니다.
+
+스킬의 [MCP 조회 흐름](./skills/legalize-kr/references/mcp-workflows.md)은 네 자료 유형의 실제 도구 인수와 검색 후 전문 조회 절차를 설명합니다. 검색 결과를 본문으로 간주하지 않고, 시행일 기준과 출처, 검색 제한을 함께 확인합니다.
 
 ## 기준일 법령 조회
 
@@ -344,6 +355,8 @@ Legalize-KR에서 "부동산 점유취득시효"를 전체 데이터셋 기준�
 
 ### MCP 도구가 보이지 않음
 
+- 원격 플러그인은 계정 연결과 현재 대화의 플러그인 선택을 확인합니다. 설치 완료만으로 모든 대화에서 도구를 사용할 수 있다고 단정하지 않습니다.
+- Sites의 소유자 전용 서버는 다른 이용자가 설치해도 접근할 수 없습니다. 운영자가 허용한 대상과 앱의 설치 경로가 필요합니다.
 - `uvx --version` 또는 `legalize-mcp`가 실행되는지 확인합니다.
 - `uvx`를 사용한다면 `uvx --from legalize-cli[mcp] legalize-mcp`가 실행되는지 확인합니다.
 - `pipx install 'legalize-cli[mcp]'`로 MCP extra가 설치되어 있는지 확인합니다.

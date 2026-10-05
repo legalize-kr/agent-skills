@@ -1,6 +1,6 @@
 ---
 name: legalize-kr
-description: Use this skill when working with Legalize-KR public Korean legal data, including laws, court precedents, administrative rules, and local ordinances. It guides agents to choose between legalize-cli, the local stdio legalize MCP server, git clone workflows, and direct GitHub access for search, retrieval, article lookup, revision history, bulk analysis, offline work, and LLM context building.
+description: Retrieve Korean laws, court precedents, administrative rules, and local ordinances through connected Legalize-KR MCP tools. Use it for document search, full text, article lookup, and revision comparison. It also guides CLI, local MCP, Git, and direct GitHub access when connected tools are unavailable.
 ---
 
 # Legalize-KR Data
@@ -22,6 +22,8 @@ Treat the data as legal source material, not legal advice. When answering a user
    - Freshness: current remote data, a specific date, a local clone, or cached/offline data.
 
 2. Choose the access method:
+   - Use Legalize-KR MCP tools already available in this conversation first. Read their input schemas. No local installation is necessary.
+   - An installed plugin is not proof that its tools are available in this conversation. Do not describe missing tools as failed installation.
    - Prefer `legalize-cli` for shell-based one-off lookup, JSON output, and no-clone workflows.
    - Prefer local stdio MCP tools when the user is configuring or using an MCP-capable agent that can run local commands.
    - Prefer `git clone` for large grep/search, history/diff work, reproducible offline analysis, or direct Markdown inspection.
@@ -36,6 +38,45 @@ Treat the data as legal source material, not legal advice. When answering a user
 3. Use the selected method with a narrow query first, then broaden only if needed. Avoid dumping whole repositories into context.
 
 4. If docs conflict, prefer the current target repository README or current tree over compact summaries. `https://legalize.kr/llms.txt` is useful LLM context, but it may be a summary and may lag detailed repo docs or newer CLI/MCP support.
+
+## Connected MCP workflow
+
+Use the connected tools before offering shell commands or setup instructions.
+Read `references/mcp-workflows.md` for tool arguments and search-to-document examples.
+If you use the access helper, pass `--mcp-connected` only when the host exposes the tools in this conversation.
+
+| User request | First tool | Next step |
+|---|---|---|
+| Known statute | `laws_get` | Read the returned body and source |
+| Known law article | `laws_article` | Keep `law_name`, `article_no`, and `category` separate |
+| Topic or uncertain document name | `search` | Retrieve the selected candidate before summarizing its content |
+| Known case number | `precedents_get` | Use the case number or a returned repository path |
+| Administrative rules from an agency | `admrules_list` | Filter by `agency` and `type_`, then use `admrules_get` |
+| Local ordinances from a region | `ordinances_list` | Filter by `jurisdiction`, `subdivision`, and `type_`, then use `ordinances_get` |
+| Same law on two dates | `laws_diff` | Report the date basis and comparison limits |
+
+Use `semantic="시행일자"` when the user asks for current law or law in force on a date.
+Use `semantic="공포일자"` when the user asks about promulgation.
+Omitted dates use today in Korea. Report the returned date basis and file-level limits.
+
+Search and list entries are candidates. Fetch the selected document before quoting or summarizing its contents.
+Pass each returned `path` as `identifier` to `precedents_get`, `admrules_get`, or `ordinances_get`.
+For law paths, use the statute name and category with `laws_get` or `laws_article`.
+Do not pass a repository path as `law_name`.
+Use the user's stated agency, region, or court to resolve candidates.
+Ask for a choice only when the intended document remains unclear.
+
+Start topic searches with a short keyword, one relevant `scope`, `strategy="auto"`, and a small `limit`.
+Use `scope="all"` for requests across datasets. Follow `next_page` only when more list candidates are necessary.
+Explain `PATH_SEARCH_ONLY`, `PARTIAL_SEARCH`, or truncation before drawing a negative conclusion.
+Never describe a title match as verified body content.
+
+Answer in the user's language. Give the requested text or summary first.
+Cite `source.original_url` when available and `source.github_url` from the retrieved document.
+Separate source text from interpretation. Include relevant date and search limits.
+If a tool fails, state the failure. Do not invent a document or describe the error as an empty result.
+For `RESPONSE_TOO_LARGE`, retrieve the requested law article or provide document links from `error.source`.
+Ask which article is needed if the request does not identify one. Do not claim full retrieval or repeat the same oversized request.
 
 ## CLI Quick Reference
 
@@ -105,6 +146,11 @@ legalize laws article 민법 제1조 --date 2024-10-01 --semantic 시행일자 -
   `resolved_version_date` in JSON output when reporting the basis used.
 
 ## MCP Quick Reference
+
+If Legalize-KR tools are connected, use them directly. The setup below is a fallback for local MCP clients.
+The Sites-hosted plugin uses OAuth and Sites access controls. It does not require `uvx`, Python, or a personal GitHub token.
+Use the host's plugin connection UI. Do not request credentials in conversation.
+See `references/access-options.md` for the separate Sites and Bearer connection methods.
 
 Install MCP support:
 
@@ -183,5 +229,6 @@ The data repositories may be force-pushed after pipeline improvements. Do not re
 
 ## References
 
+- Read `references/mcp-workflows.md` for conversational retrieval with connected tools.
 - Read `references/access-options.md` when choosing between CLI, MCP, git clone, and direct GitHub access.
 - Read `references/data-layout.md` when constructing repository paths, interpreting frontmatter, or explaining data model details.

@@ -6,6 +6,7 @@ Use this reference when deciding how to retrieve or analyze Legalize-KR data.
 
 | Method | Use When | Strengths | Tradeoffs |
 |---|---|---|---|
+| Connected MCP tools | Legalize-KR tools are available in the conversation | Direct retrieval without local installation | Host connection, Site audience, and server request limits apply |
 | `legalize-cli` | One-off lookup, JSON output, date-based law article retrieval, no local clone | Fast setup, agent-friendly `--json`, local cache, all four datasets, no manual path construction for common tasks | GitHub API rate limits; Python install or `uvx`; not ideal for very large local grep |
 | Local MCP server | An MCP-capable agent can run local stdio tools | Conversational agent integration, structured tool calls, same package as CLI | Requires MCP client setup plus `uvx`, `pipx`, or `pip`; still subject to GitHub API limits |
 | Git clone | Bulk grep, offline work, Git history/diff, reproducible snapshots | Full Markdown corpus, native `git log`/`git diff`, no API calls after clone | Larger local checkout; path knowledge required; data repos may be force-pushed |
@@ -14,9 +15,10 @@ Use this reference when deciding how to retrieve or analyze Legalize-KR data.
 
 ## Recommended Defaults
 
-- For user-facing answers about a single law, article, precedent, rule, or ordinance: start with `legalize-cli --json`.
+- For conversational retrieval, use connected Legalize-KR MCP tools first. Read `mcp-workflows.md` for the search-to-document workflow.
+- If connected tools are unavailable and shell access is appropriate, use `legalize-cli --json`.
 - For agent product setup with local tool execution: configure `legalize-mcp`.
-- For non-developer users who only need agent guidance: install the skill/plugin first, then add MCP only if actual tool calls are needed.
+- For non-developer users, use the host's plugin selection and connection controls. Installation alone does not prove tool availability in the current conversation.
 - For "find every occurrence", "compare many files", or "show history": clone the relevant repository and use `rg` plus Git.
 - For exact current tool names: inspect the installed `legalize-cli` help or `cli-tools` README, because compact public summaries may not list every domain.
 
@@ -86,6 +88,20 @@ legalize --token ghp_xxxx ...
 Use tree/metadata strategies or local clones when code search would exhaust quota.
 
 ## MCP Patterns
+
+### Connected hosted MCP
+
+The [Sites guide](https://legalize-kr-mcp.icy-bowl-0769.chatgpt.site) permits public visits.
+Its document tools require the provisioned plugin and a Sites OAuth connection.
+Public Site access does not establish public plugin directory distribution.
+Visitors do not need personal GitHub connections or tokens. The owner configures the optional shared server secret.
+Other users need a supported installation path in their host app.
+Do not change the audience or reuse the owner's credentials to resolve access failures.
+
+For a separate Bearer-authenticated server, enter its access key through the host's secure connection controls.
+Do not send access keys in conversation or as tool arguments. Read the connected tool schemas before use.
+
+### Local stdio MCP
 
 Register `legalize-mcp` as a local stdio MCP server. Ask the agent to call tools rather than scraping pages.
 

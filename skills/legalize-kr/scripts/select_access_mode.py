@@ -31,9 +31,22 @@ def detect_tools() -> dict[str, bool]:
     }
 
 
-def recommend(task: str, scope: str) -> Recommendation:
+def recommend(task: str, scope: str, *, mcp_connected: bool = False) -> Recommendation:
     token_present = bool(os.environ.get("GITHUB_TOKEN") or os.environ.get("LEGALIZE_GITHUB_TOKEN"))
     tools = detect_tools()
+
+    if mcp_connected and task in {"single", "article", "search", "compare", "list", "agent"}:
+        return Recommendation(
+            primary="mcp",
+            fallbacks=["legalize-cli", "direct-github"],
+            reasons=[
+                "Use the Legalize-KR tools available in the current conversation.",
+                "Read the connected schemas before calling tools. No local installation is necessary.",
+            ],
+            example_commands=[],
+            token_present=token_present,
+            detected_tools=tools,
+        )
 
     if task == "agent":
         return Recommendation(
@@ -115,9 +128,10 @@ def main() -> None:
         default="all",
     )
     parser.add_argument("--json", action="store_true", help="Emit JSON instead of text.")
+    parser.add_argument("--mcp-connected", action="store_true", help="Legalize-KR tools are available in the current conversation.")
     args = parser.parse_args()
 
-    rec = recommend(args.task, args.scope)
+    rec = recommend(args.task, args.scope, mcp_connected=args.mcp_connected)
     if args.json:
         print(json.dumps(asdict(rec), ensure_ascii=False, indent=2))
         return
