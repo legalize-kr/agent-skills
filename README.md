@@ -32,8 +32,8 @@ OpenAI Sites의 `Legalize-KR MCP Server` 플러그인과 이 저장소의 스킬
 
 ## 무엇이 설치되나요?
 
-이 저장소는 두 계층을 제공합니다. 스킬 0.2.0은 PyPI에 게시된
-`legalize-cli[mcp]==0.5.0`을 사용합니다. 로컬 MCP는 2.0 응답을 제공하며
+이 저장소는 두 계층을 제공합니다. 스킬 0.2.1은 PyPI에 게시된
+`legalize-cli[mcp]==0.5.1`을 사용합니다. 로컬 MCP는 2.0 응답을 제공하며
 CLI JSON은 기존 1.0 형식을 유지합니다.
 
 | 계층 | 역할 | 터미널 필요 여부 |
@@ -180,7 +180,7 @@ MCP 도구로 쓰려면 `.cursor/mcp.json`에 등록합니다.
     "legalize-kr": {
       "type": "stdio",
       "command": "uvx",
-      "args": ["--from", "legalize-cli[mcp]==0.5.0", "legalize-mcp"]
+      "args": ["--from", "legalize-cli[mcp]==0.5.1", "legalize-mcp"]
     }
   }
 }
@@ -243,14 +243,14 @@ npx skills list --json
 
 ## MCP 도구 연결
 
-이 저장소의 [.mcp.json](./.mcp.json)은 `uvx`로 검증된 `legalize-cli[mcp]==0.5.0`을 실행합니다. 해당 버전의 PyPI 설치와 MCP 도구 목록 조회를 확인했습니다. `uvx` 방식은 별도 영구 설치 없이 MCP 서버를 실행합니다.
+이 저장소의 [.mcp.json](./.mcp.json)은 `uvx`로 검증된 `legalize-cli[mcp]==0.5.1`을 실행합니다. 해당 버전의 PyPI 설치와 MCP 도구 목록 조회를 확인했습니다. `uvx` 방식은 별도 영구 설치 없이 MCP 서버를 실행합니다.
 
 ```json
 {
   "mcpServers": {
     "legalize-kr": {
       "command": "uvx",
-      "args": ["--from", "legalize-cli[mcp]==0.5.0", "legalize-mcp"]
+      "args": ["--from", "legalize-cli[mcp]==0.5.1", "legalize-mcp"]
     }
   }
 }
@@ -279,7 +279,7 @@ Claude Desktop의 `claude_desktop_config.json`에도 같은 설정을 넣을 수
   "mcpServers": {
     "legalize-kr": {
       "command": "uvx",
-      "args": ["--from", "legalize-cli[mcp]==0.5.0", "legalize-mcp"]
+      "args": ["--from", "legalize-cli[mcp]==0.5.1", "legalize-mcp"]
     }
   }
 }

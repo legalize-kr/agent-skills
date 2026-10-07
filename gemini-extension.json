@@ -1,13 +1,13 @@
 {
   "name": "legalize-kr",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Legalize-KR MCP and Skills integration for Korean laws, court precedents, administrative rules, and local ordinances.",
   "mcpServers": {
     "legalize-kr": {
       "command": "uvx",
       "args": [
         "--from",
-        "legalize-cli[mcp]==0.5.0",
+        "legalize-cli[mcp]==0.5.1",
         "legalize-mcp"
       ]
     }

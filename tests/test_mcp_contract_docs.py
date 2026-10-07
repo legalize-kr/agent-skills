@@ -38,7 +38,7 @@ class MCPContractDocsTest(unittest.TestCase):
         self.assertIn("ask the user to select a returned path", workflow)
 
     def test_manifests_pin_same_cli(self) -> None:
-        pin = "legalize-cli[mcp]==0.5.0"
+        pin = "legalize-cli[mcp]==0.5.1"
         mcp = json.loads((ROOT / ".mcp.json").read_text(encoding="utf-8"))
         gemini = json.loads((ROOT / "gemini-extension.json").read_text(encoding="utf-8"))
         self.assertEqual(mcp["mcpServers"]["legalize-kr"]["args"][1], pin)

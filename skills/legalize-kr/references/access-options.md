@@ -114,7 +114,7 @@ No permanent install:
   "mcpServers": {
     "legalize-kr": {
       "command": "uvx",
-      "args": ["--from", "legalize-cli[mcp]==0.5.0", "legalize-mcp"]
+      "args": ["--from", "legalize-cli[mcp]==0.5.1", "legalize-mcp"]
     }
   }
 }

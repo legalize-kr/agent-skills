@@ -1,6 +1,6 @@
 {
   "name": "legalize-kr",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Use Legalize-KR public Korean legal datasets, including laws, court precedents, administrative rules, and local ordinances.",
   "author": {
     "name": "Junghwan Park"
