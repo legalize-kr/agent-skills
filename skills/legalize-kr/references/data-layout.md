@@ -27,8 +27,8 @@ kr/{law-name-without-spaces}/
 Examples:
 
 ```text
-kr/민법/법률(법률).md
-kr/민법/시행령.md
+kr/민법/법률.md
+kr/근로기준법/시행령.md
 kr/친일반민족행위자재산의국가귀속에관한특별법/법률.md
 ```
 
@@ -49,7 +49,7 @@ Use Git history for revision questions:
 
 ```bash
 git -C legalize-kr log -- kr/민법/
-git -C legalize-kr log --before="2025-01-01" -1 -- kr/민법/법률(법률).md
+git -C legalize-kr log --before="2025-01-01" -1 -- kr/민법/법률.md
 ```
 
 ## Court Precedents
@@ -185,4 +185,3 @@ corresponding link, while `source.original_url` comes only from a safe
 frontmatter `출처` URL and may be null. Search code API item SHA is a blob SHA,
 not a commit; its `source.ref` is null. Force-pushed mirror history can make
 old commit links unavailable, so keep law ID/MST and source dates as context.
-
