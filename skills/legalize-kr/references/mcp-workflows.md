@@ -34,6 +34,8 @@ For “2020년과 2024년의 근로기준법을 비교해줘”, use:
 {"name":"laws_diff","arguments":{"law_name":"근로기준법","date_a":"2020-01-01","date_b":"2024-01-01","semantic":"시행일자","mode":"article"}}
 ```
 
+If the law name returns `AMBIGUOUS_MATCH`, ask the user to select a returned path.
+Pass that exact path as `law_name` for the comparison.
 If the user needs different dates, use those dates. Report each resolved version and relevant warnings.
 The comparison follows Markdown structure. A `renamed` result is a similarity estimate.
 

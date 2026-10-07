@@ -4,10 +4,9 @@
       "command": "uvx",
       "args": [
         "--from",
-        "legalize-cli[mcp]",
+        "legalize-cli[mcp]==0.5.0",
         "legalize-mcp"
       ]
     }
   }
 }
-

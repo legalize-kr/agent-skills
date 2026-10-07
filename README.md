@@ -32,7 +32,9 @@ OpenAI Sites의 `Legalize-KR MCP Server` 플러그인과 이 저장소의 스킬
 
 ## 무엇이 설치되나요?
 
-이 저장소는 두 계층을 제공합니다.
+이 저장소는 두 계층을 제공합니다. 스킬 0.2.0은 PyPI에 게시된
+`legalize-cli[mcp]==0.5.0`을 사용합니다. 로컬 MCP는 2.0 응답을 제공하며
+CLI JSON은 기존 1.0 형식을 유지합니다.
 
 | 계층 | 역할 | 터미널 필요 여부 |
 |---|---|---|
@@ -178,7 +180,7 @@ MCP 도구로 쓰려면 `.cursor/mcp.json`에 등록합니다.
     "legalize-kr": {
       "type": "stdio",
       "command": "uvx",
-      "args": ["--from", "legalize-cli[mcp]", "legalize-mcp"]
+      "args": ["--from", "legalize-cli[mcp]==0.5.0", "legalize-mcp"]
     }
   }
 }
@@ -241,14 +243,14 @@ npx skills list --json
 
 ## MCP 도구 연결
 
-이 저장소의 [.mcp.json](./.mcp.json)은 `uvx`로 `legalize-cli[mcp]`를 실행합니다. `uvx` 방식은 별도 가상환경을 만들지 않고 MCP 서버를 실행하므로, Claude Code, Cursor, Gemini CLI 같은 개발자 도구에서 가장 간단합니다.
+이 저장소의 [.mcp.json](./.mcp.json)은 `uvx`로 검증된 `legalize-cli[mcp]==0.5.0`을 실행합니다. 해당 버전의 PyPI 설치와 MCP 도구 목록 조회를 확인했습니다. `uvx` 방식은 별도 영구 설치 없이 MCP 서버를 실행합니다.
 
 ```json
 {
   "mcpServers": {
     "legalize-kr": {
       "command": "uvx",
-      "args": ["--from", "legalize-cli[mcp]", "legalize-mcp"]
+      "args": ["--from", "legalize-cli[mcp]==0.5.0", "legalize-mcp"]
     }
   }
 }
@@ -277,13 +279,25 @@ Claude Desktop의 `claude_desktop_config.json`에도 같은 설정을 넣을 수
   "mcpServers": {
     "legalize-kr": {
       "command": "uvx",
-      "args": ["--from", "legalize-cli[mcp]", "legalize-mcp"]
+      "args": ["--from", "legalize-cli[mcp]==0.5.0", "legalize-mcp"]
     }
   }
 }
 ```
 
 토큰 없이도 동작하지만 GitHub API 한도가 낮습니다. 반복 검색이나 코드 검색을 쓸 때는 Agent를 시작하는 환경에 `GITHUB_TOKEN` 또는 `LEGALIZE_GITHUB_TOKEN`을 설정하세요.
+
+로컬 MCP 2.0은 11개 도구(`laws_list`, `laws_get`, `laws_article`, `laws_diff`,
+`precedents_list`, `precedents_get`, `admrules_list`, `admrules_get`,
+`ordinances_list`, `ordinances_get`, `search`)를 제공합니다. 성공 응답은
+`structuredContent`와 동일한 JSON text를 가지며 `version`, `source`,
+`warnings`에서 날짜와 출처의 한계를 확인합니다. 오류는 `isError: true`와
+JSON text의 `error.code`로 구분합니다. 검색의 `outcomes`는 실제 본문 또는
+경로 검색 여부와 일부 데이터셋 실패를 밝힙니다. CLI의 `--json`은 계속
+`schema_version: "1.0"`의 평평한 키를 유지합니다. 원격 Worker 0.2.1도 같은
+11개 도구와 MCP 2.0 계약을 제공합니다. `https://mcp.legalize.kr/mcp` 연결에는
+호스트 설정의 Bearer 접근키가 필요하며 키를 대화나 도구 인수로 전달하지 않습니다.
+기존 로컬 stdio 설정은 그대로 사용할 수 있습니다.
 
 ## 직접 API에 넣기
 

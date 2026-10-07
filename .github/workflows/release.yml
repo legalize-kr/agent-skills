@@ -23,10 +23,19 @@ jobs:
             scripts/validate_claude_plugin_package.py \
             skills/legalize-kr/scripts/select_access_mode.py
 
+      - name: Run repository tests
+        run: python3 -m unittest discover -s tests
+
       - name: Build Claude Cowork plugin ZIP
         run: |
           python3 scripts/package_claude_plugin.py
           python3 scripts/validate_claude_plugin_package.py dist/legalize-kr-plugin.zip
+
+      - name: Check release tag matches plugin version
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          TAG_NAME: ${{ github.ref_name }}
+        run: python3 scripts/validate_claude_plugin_package.py dist/legalize-kr-plugin.zip --expected-version "${TAG_NAME#v}"
 
       - name: Upload workflow artifact
         uses: actions/upload-artifact@v4
@@ -47,4 +56,3 @@ jobs:
               --notes "Claude Cowork upload package for Legalize-KR agent skills."
           fi
           gh release upload "$TAG_NAME" dist/legalize-kr-plugin.zip --clobber
-

@@ -48,7 +48,7 @@ legalize ordinances list --jurisdiction 서울특별시 --type 조례 --json
 ## Law Date Semantics
 
 `laws as-of`, `laws get`, `laws article`, `laws diff`, and MCP `laws_get` /
-`laws_article` accept both `공포일자` and `시행일자`:
+`laws_article` / `laws_diff` accept both `공포일자` and `시행일자`:
 
 ```bash
 # Explicit compatibility behavior: latest file promulgated by the date.
@@ -94,7 +94,9 @@ Use tree/metadata strategies or local clones when code search would exhaust quot
 The [Sites guide](https://legalize-kr-mcp.icy-bowl-0769.chatgpt.site) permits public visits.
 Its document tools require the provisioned plugin and a Sites OAuth connection.
 Public Site access does not establish public plugin directory distribution.
-Visitors do not need personal GitHub connections or tokens. The owner configures the optional shared server secret.
+Personal GitHub key registration is optional. Without a key, retrieval limits or content search restrictions can apply.
+A registered key serves only its owner and is not shared with other users.
+Users can delete their key on the personal key page.
 Other users need a supported installation path in their host app.
 Do not change the audience or reuse the owner's credentials to resolve access failures.
 
@@ -112,7 +114,7 @@ No permanent install:
   "mcpServers": {
     "legalize-kr": {
       "command": "uvx",
-      "args": ["--from", "legalize-cli[mcp]", "legalize-mcp"]
+      "args": ["--from", "legalize-cli[mcp]==0.5.0", "legalize-mcp"]
     }
   }
 }
@@ -136,12 +138,53 @@ pipx install 'legalize-cli[mcp]'
 
 Available tool categories:
 
-- Laws: list, full text, article. `laws_get` and `laws_article` support the
-  `semantic` argument and return `file_effective_date_only` for dated results.
+- Laws: list, full text, article, same-law structural diff. `laws_get`,
+  `laws_article`, and `laws_diff` support the `semantic` argument. MCP 2.0
+  uses `version.effective_date_scope: "file"`; CLI 1.0 keeps
+  `file_effective_date_only: true`.
 - Precedents: list, full text.
 - Administrative rules: list, full text.
 - Local ordinances: list, full text.
 - Search: keyword search across scopes.
+
+MCP 2.0 provides `structuredContent` plus equal JSON text. Inspect `version`,
+`source`, `warnings`, and each search `outcomes` entry. `PATH_SEARCH_ONLY`
+indicates path-only search, `PARTIAL_SEARCH` indicates missing datasets, and
+`SEARCH_INDEX_NOT_SNAPSHOT` means GitHub body search is not a historical snapshot.
+An error has `isError: true` and a JSON text `error.code`; `AMBIGUOUS_MATCH`
+requires choosing a full public path. Do not supply token or arbitrary local
+file paths as MCP arguments.
+
+### Optional remote MCP
+
+Worker 0.2.1 at `https://mcp.legalize.kr/mcp` adopts the same 11-tool MCP 2.0
+contract. Configure `Authorization: Bearer <MCP_API_KEY>` through the host's
+secure settings, never conversation or tool arguments. The endpoint is
+access-key restricted, not an anonymous public service. An optional
+`X-GitHub-Token` header overrides the server GitHub token for one request.
+Remote HTTP does not change the local stdio installation or CLI 1.0 output.
+Remote execution has additional CPU, input and diff-work limits; large requests
+may require a narrower query or local execution. Inspect `tools/list` because
+older remote deployments supplied only six tools and different results.
+
+### Optional OpenAI Sites MCP
+
+The workspace `sites-mcp/` implementation provides the same 11-tool MCP 2.0
+contract through a Site-hosted `POST /mcp` endpoint. Publication and installation
+must be verified before treating a registered Site as available.
+
+Sites manages OAuth, access policy and its App/plugin. For a published instance,
+install/connect its provisioned plugin under **Plugins → Personal → Created by
+you**. Use Sites-reported connection details; do not reuse `MCP_API_KEY`, add a
+local stdio server or run `codex mcp add` for this connection. The initial audience
+is owner-private. Discovery is public-schema-only; data calls require the user
+identity supplied by Sites after authentication and audience checks.
+
+A personal GitHub key is optional. Register it through the Site’s personal key page.
+Without a key, request limits or body search restrictions can apply.
+If `auto` uses paths, report `PATH_SEARCH_ONLY`. If `code` requires authentication, report `AUTH_REQUIRED`. Check `warnings`, `outcomes` and `source`. The local CLI,
+local stdio installation, and the separate Bearer-authenticated remote endpoint
+retain their existing contracts.
 
 ## Git Clone Patterns
 

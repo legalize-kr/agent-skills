@@ -57,7 +57,7 @@ def recommend(task: str, scope: str, *, mcp_connected: bool = False) -> Recommen
                 "Use legalize-cli or direct GitHub access if the current client cannot run local MCP commands.",
             ],
             example_commands=[
-                "uvx --from legalize-cli[mcp] legalize-mcp",
+                "uvx --from 'legalize-cli[mcp]==0.5.0' legalize-mcp",
                 "pipx install 'legalize-cli[mcp]'",
                 "legalize-mcp",
             ],

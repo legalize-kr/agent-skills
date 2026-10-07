@@ -27,7 +27,7 @@ kr/{law-name-without-spaces}/
 Examples:
 
 ```text
-kr/민법/법률.md
+kr/민법/법률(법률).md
 kr/민법/시행령.md
 kr/친일반민족행위자재산의국가귀속에관한특별법/법률.md
 ```
@@ -49,7 +49,7 @@ Use Git history for revision questions:
 
 ```bash
 git -C legalize-kr log -- kr/민법/
-git -C legalize-kr log --before="2025-01-01" -1 -- kr/민법/법률.md
+git -C legalize-kr log --before="2025-01-01" -1 -- kr/민법/법률(법률).md
 ```
 
 ## Court Precedents
@@ -177,4 +177,12 @@ Important frontmatter fields:
 - Some old precedent dates from the source API use Dangi years and are normalized to CE.
 - Some law image/formula/table markup may remain as source markup.
 - Markdown renderers may hide angle-bracket annotations such as `<개정 2024.9.20>` if treated as HTML tags.
+# MCP 2.0 source references
+
+For fetched documents, `source.repository`, `source.path`, and `source.ref`
+identify the GitHub mirror revision actually read. `source.github_url` is the
+corresponding link, while `source.original_url` comes only from a safe
+frontmatter `출처` URL and may be null. Search code API item SHA is a blob SHA,
+not a commit; its `source.ref` is null. Force-pushed mirror history can make
+old commit links unavailable, so keep law ID/MST and source dates as context.
 
